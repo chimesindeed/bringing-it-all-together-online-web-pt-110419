@@ -22,9 +22,9 @@ class Dog
     if dogs_id != nil
       DB[:conn].execute(sql_update)
     elsif dogs_id == nil
-    DB[:conn].execute(sql_insert)
-      
-  end
+      DB[:conn].execute(sql_insert)
+      @id = last_insert_rowid
+    end
   
   def self.drop_table
     sql_drop =  <<-SQL
