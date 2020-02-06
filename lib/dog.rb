@@ -18,10 +18,10 @@ class Dog
     
     sql_insert = "INSERT INTO dogs(name, breed) VALUES('#{dogs_name}', '#{dogs_breed}')"
     sql_update = "UPDATE dogs SET name = '#{dogs_name}' WHERE id = '#{dogs_id}'"
-    
+    sql_get_last_insert = "SELECT last_insert_rowid() FROM dogs"
     if dogs_id == nil
       DB[:conn].execute(sql_insert)
-      @id = last_insert_rowid
+      @id =  DB[:conn].execute(sql_get_last_insert).flatten.join.to_i
     elsif dogs_id != nil
       DB[:conn].execute(sql_update)
     end
