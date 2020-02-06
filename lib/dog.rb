@@ -16,15 +16,17 @@ class Dog
     dogs_breed = self.breed
     dogs_id = self.id
     
-    sql_insert = "INSERT INTO dogs(name, breed) VALUES('#{dogs_name}', '#{dogs_breed}'"
+    sql_insert = "INSERT INTO dogs(name, breed) VALUES('#{dogs_name}', '#{dogs_breed}')"
     sql_update = "UPDATE dogs SET name = '#{dogs_name}' WHERE id = '#{dogs_id}'"
     
-    if dogs_id != nil
-      DB[:conn].execute(sql_update)
-    elsif dogs_id == nil
+    if dogs_id == nil
       DB[:conn].execute(sql_insert)
       @id = last_insert_rowid
+    elsif dogs_id != nil
+      DB[:conn].execute(sql_update)
     end
+    self
+  end
   
   def self.drop_table
     sql_drop =  <<-SQL
