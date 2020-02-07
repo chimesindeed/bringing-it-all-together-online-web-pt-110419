@@ -1,16 +1,25 @@
-
 class Dog
 
   attr_accessor :name, :breed, :id
-
-  def initialize( name:,
-                  breed:, 
-                  id: nil )
+  
+  def initialize(name:, breed:, id: nil)
     @name = name
     @breed = breed
     @id = id
   end
   
+  def self.find_or_create_by
+ 
+  end
+  def self.find_by_id(int)
+    row = (DB[:conn].execute("SELECT * FROM dogs WHERE id = ?", int)).flatten
+    new_dog = Dog.new(id: row[0], name: row[1], breed: row[2])
+    new_dog
+  end
+  def self.new_from_db(row)
+    instance = Dog.new(id: row[0], name: row[1], breed: row[2])
+    instance
+  end
   def save
     dogs_name = self.name
     dogs_breed = self.breed
@@ -28,6 +37,13 @@ class Dog
     end
     self
   end
+  
+  def self.create(name:, breed:)
+    new_dog = Dog.new(name: name, breed: breed)
+    new_dog.save
+    
+  end
+    
   
   def self.drop_table
     sql_drop =  <<-SQL
