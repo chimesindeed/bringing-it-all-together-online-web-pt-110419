@@ -1,3 +1,4 @@
+require 'pry'
 class Dog
 
   attr_accessor :name, :breed, :id
@@ -8,18 +9,19 @@ class Dog
     @id = id
   end
   
-  def self.find_or_create_by
- 
-  end
+
+
   def self.find_by_id(int)
     row = (DB[:conn].execute("SELECT * FROM dogs WHERE id = ?", int)).flatten
     new_dog = Dog.new(id: row[0], name: row[1], breed: row[2])
     new_dog
   end
+
   def self.new_from_db(row)
     instance = Dog.new(id: row[0], name: row[1], breed: row[2])
     instance
   end
+
   def save
     dogs_name = self.name
     dogs_breed = self.breed
@@ -34,7 +36,7 @@ class Dog
       @id =  DB[:conn].execute(sql_get_last_insert).flatten.join.to_i
     elsif dogs_id != nil
       DB[:conn].execute(sql_update, dogs_name, dogs_id)
-    end
+     end
     self
   end
   
@@ -61,5 +63,13 @@ class Dog
         )
     SQL
     DB[:conn].execute(sql_create)
+  end
+  
+  def self.find_or_create_by(name:, breed:)
+   sql = <<-SQL
+   SELECT name, breed FROM dogs
+   SQL
+   DB[:conn].execute(sql)
+   binding.pry
   end
 end
