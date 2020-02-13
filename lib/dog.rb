@@ -9,10 +9,17 @@ class Dog
     @id = id
   end
   
-
+def update
+end
 
   def self.find_by_id(int)
     row = (DB[:conn].execute("SELECT * FROM dogs WHERE id = ?", int)).flatten
+    new_dog = Dog.new(id: row[0], name: row[1], breed: row[2])
+    new_dog
+  end
+  
+  def self.find_by_name(name)
+    row = (DB[:conn].execute("SELECT * FROM dogs WHERE name = ?", name)).flatten
     new_dog = Dog.new(id: row[0], name: row[1], breed: row[2])
     new_dog
   end
@@ -70,12 +77,13 @@ class Dog
    x = name
    y = breed
    sql = <<-SQL
-   SELECT name, breed FROM dogs
+   SELECT name, breed, id FROM dogs
    SQL
    query = DB[:conn].execute(sql).flatten
    if x == query[0] && y ==query[1]
      instance = query
    else instance = Dog.create(name: x, breed: y)
+    
     #Dog.create(name: name, breed: breed)
     end
     instance
