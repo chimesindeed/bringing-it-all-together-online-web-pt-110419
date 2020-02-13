@@ -9,7 +9,11 @@ class Dog
     @id = id
   end
   
-def update
+def update(parameter)
+  record=[]
+  # update method takes parameter 'name'. 
+  #update method SELECTS record from atabase
+  binding.pry
 end
 
   def self.find_by_id(int)
@@ -89,3 +93,4 @@ end
     instance
   end
 end
+binding.pry
