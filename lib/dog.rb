@@ -69,7 +69,7 @@ class Dog
    sql = <<-SQL
    SELECT name, breed FROM dogs
    SQL
-   DB[:conn].execute(sql)
+   query.flatten = DB[:conn].execute(sql)
    binding.pry
   end
 end
