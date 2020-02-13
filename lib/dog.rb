@@ -66,10 +66,18 @@ class Dog
   end
   
   def self.find_or_create_by(name:, breed:)
+   instance = nil
+   x = name
+   y = breed
    sql = <<-SQL
    SELECT name, breed FROM dogs
    SQL
-   query.flatten = DB[:conn].execute(sql)
-   binding.pry
+   query = DB[:conn].execute(sql).flatten
+   if x == query[0] && y ==query[1]
+     instance = query
+   else instance = Dog.create(name: x, breed: y)
+    #Dog.create(name: name, breed: breed)
+    end
+    instance
   end
 end
