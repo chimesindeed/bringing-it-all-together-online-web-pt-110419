@@ -1,4 +1,5 @@
 require 'pry'
+
 class Dog
 
   attr_accessor :name, :breed, :id
@@ -52,17 +53,15 @@ end
       Dog.all << self
     elsif dogs_id != nil
       DB[:conn].execute(sql_update, dogs_name, dogs_id)
-     end
+    end
     self
   end
   
   def self.create(name:, breed:)
     new_dog = Dog.new(name: name, breed: breed)
     new_dog.save
-    
   end
     
-  
   def self.drop_table
     sql_drop =  <<-SQL
         DROP TABLE IF EXISTS dogs
@@ -82,11 +81,21 @@ end
   end
   
   def self.find_or_create_by(name:, breed:)
-    result = nil
-    if self.all.include? #{'name'}
-    puts "{self.breed}"
+    doggy = nil
+    query = "SELECT * FROM dogs"
+    result = DB[:conn].execute(query)
+    #binding.pry
+    result.each {|result|
+    if name == result[1] && breed == result[2]
+      doggy = Dog.all.find{|instance|
+      instance.name == result[1] && instance.breed == result[2]}
     end
-    
+    }
+    unless name ==result[1] && breed == result[2]
+    doggy = new_dog = Dog.create(name: name, breed: breed)
+    end
+    binding.pry
+    doggy
   end
-binding.pry
 end
+binding.pry

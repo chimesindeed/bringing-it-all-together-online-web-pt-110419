@@ -1,4 +1,4 @@
-f# Basic Dog ORM
+# Basic Dog ORM
 
 ## Objectives
 
