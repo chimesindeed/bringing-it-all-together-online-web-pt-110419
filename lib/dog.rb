@@ -2,6 +2,10 @@ require 'pry'
 class Dog
 
   attr_accessor :name, :breed, :id
+  @@all = []
+  def self.all
+    @@all
+  end
   
   def initialize(name:, breed:, id: nil)
     @name = name
@@ -45,6 +49,7 @@ end
     if dogs_id == nil
       DB[:conn].execute(sql_insert, dogs_name, dogs_breed)
       @id =  DB[:conn].execute(sql_get_last_insert).flatten.join.to_i
+      Dog.all << self
     elsif dogs_id != nil
       DB[:conn].execute(sql_update, dogs_name, dogs_id)
      end
@@ -77,20 +82,11 @@ end
   end
   
   def self.find_or_create_by(name:, breed:)
-   instance = nil
-   x = name
-   y = breed
-   sql = <<-SQL
-   SELECT name, breed, id FROM dogs
-   SQL
-   query = DB[:conn].execute(sql).flatten
-   if x == query[0] && y ==query[1]
-     instance = query
-   else instance = Dog.create(name: x, breed: y)
-    
-    #Dog.create(name: name, breed: breed)
+    result = nil
+    if self.all.include? #{'name'}
+    puts "{self.breed}"
     end
-    instance
+    
   end
-end
 binding.pry
+end
