@@ -81,21 +81,27 @@ end
   end
   
   def self.find_or_create_by(name:, breed:)
-    doggy = nil
-    query = "SELECT * FROM dogs"
-    result = DB[:conn].execute(query)
-    #binding.pry
-    result.each {|result|
-    if name == result[1] && breed == result[2]
-      doggy = Dog.all.find{|instance|
-      instance.name == result[1] && instance.breed == result[2]}
+    sql = <<-SQL
+          SELECT *
+          FROM dogs
+          WHERE name = ?
+          AND breed = ?
+          LIMIT 1
+        SQL
+
+    dog = DB[:conn].execute(sql,name,breed)
+
+    if !dog.empty?
+      dog_data = dog[0]
+      dog = Dog.new(id: dog_data[0], name: dog_data[1], breed: dog_data[2])
+    else
+      dog = self.create(name: name, breed: breed)
     end
-    }
-    unless name ==result[1] && breed == result[2]
-    doggy = new_dog = Dog.create(name: name, breed: breed)
-    end
-    binding.pry
-    doggy
+    dog
+  end
+  def update
+    sql = "UPDATE dogs SET name = ?, breed = ?  WHERE id = ?"
+    DB[:conn].execute(sql, self.name, self.breed, self.id)
   end
 end
-binding.pry
+#binding.pry
