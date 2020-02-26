@@ -94,7 +94,6 @@ end
     unless name ==result[1] && breed == result[2]
     doggy = new_dog = Dog.create(name: name, breed: breed)
     end
-    binding.pry
     doggy
   end
 end
